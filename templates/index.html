@@ -52,5 +52,11 @@
 
       <footer>Rock beats scissors. Scissors beats paper. Paper beats rock.</footer>
     </main>
+    {% if dev_refresh_revision is defined %}
+      <script src="{{ url_for('static', filename='dev-refresh.js') }}"
+              data-revision="{{ dev_refresh_revision }}"
+              data-endpoint="{{ url_for('refresh_revision') }}"
+              data-start="{{ url_for('index') }}"></script>
+    {% endif %}
   </body>
 </html>

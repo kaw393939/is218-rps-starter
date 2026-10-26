@@ -39,7 +39,11 @@ When ready, use your original **class terminal**, still in the clone, to start t
 .venv/bin/python run.py
 ```
 
-Open the printed address, usually **http://127.0.0.1:5050**. Click a move: expect both choices and **“Starter: game rules not built yet.”** A missing winner is the task, not a failed setup. Leave this terminal running the game; code edits reload automatically. You will open the AI project's separate terminal for checks and Git in Step 2.
+Open the printed address, usually **http://127.0.0.1:5050**. Click a move: expect both choices and **“Starter: game rules not built yet.”** A missing winner is the task, not a failed setup. Leave this terminal running the game. You will open the AI project's separate terminal for checks and Git in Step 2.
+
+This is the recommended **local development mode**. Once you **save** a Python, HTML template, CSS, or JavaScript change, the open browser automatically returns to the starting page with that change. Python saves restart the server; the browser waits for it to return. The displayed round clears instead of resubmitting your last move. Saved files remain on disk; there is no saved game history. Stop the server with **Ctrl+C** in this terminal.
+
+For an optional stable demonstration, stop the server and use `.venv/bin/python run.py --plain`. This disables both automatic server restarts and browser refresh; restart it and open the printed address again after editing. Both modes need the Python 3.12 `.venv` and requirements prepared above, bind only to your computer, and leave the interactive debugger off. Checks start their own reload-free server, so keep using `.venv/bin/python check.py` in the other terminal. GitHub Pages hosts the exercise instructions; the Python game runs locally at the printed address.
 
 **Checkpoint:** your agent is connected to the clone, the starter checks pass, and you can see the game's unfinished notice. Stuck? [Setup help](https://kaw393939.github.io/218_spec/setup.html).
 

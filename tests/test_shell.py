@@ -93,3 +93,8 @@ def test_stylesheet_is_available(client):
     response = client.get("/static/style.css")
     assert response.status_code == 200
     assert b"focus-visible" in response.data
+
+
+def test_check_server_has_no_development_refresh(client):
+    assert b"dev-refresh.js" not in client.get("/").data
+    assert client.get("/__dev__/revision").status_code == 404
