@@ -6,6 +6,8 @@
   async function checkForSavedChanges() {
     try {
       const response = await fetch(script.dataset.endpoint, { cache: "no-store" });
+      // A plain-mode server no longer provides the development endpoint.
+      if (response.status === 404) return;
       if (response.ok && (await response.json()).revision !== revision) {
         // Use GET, even after a submitted round: never resubmit the old move.
         window.location.replace(script.dataset.start);

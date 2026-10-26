@@ -10,7 +10,7 @@ import sys
 from threading import Thread
 
 import pytest
-from playwright.sync_api import Page, expect
+from playwright.sync_api import Page, TimeoutError as PlaywrightTimeoutError, expect
 
 pytestmark = pytest.mark.e2e
 PROJECT = Path(__file__).resolve().parents[2]
@@ -118,6 +118,26 @@ def test_plain_mode_omits_browser_refresh(page: Page, launch_game):
     assert page.request.get(address + "/__dev__/revision").status == 404
     page.get_by_role("button", name="Paper", exact=True).click()
     expect(page.get_by_label("This round’s choices")).to_be_visible()
+
+
+def test_missing_refresh_endpoint_stops_polling(page: Page, launch_game):
+    """An already open development page stops polling after a plain-mode 404."""
+    _, address, _ = launch_game
+    polls = []
+
+    def missing_endpoint(route):
+        polls.append(route.request.url)
+        route.fulfill(status=404, body="Not Found")
+
+    page.route("**/__dev__/revision", missing_endpoint)
+    with page.expect_response(address + "/__dev__/revision") as first_poll:
+        page.goto(address)
+    assert first_poll.value.status == 404
+    # No second request should arrive during three full polling intervals.
+    with pytest.raises(PlaywrightTimeoutError):
+        with page.expect_request(address + "/__dev__/revision", timeout=1500):
+            pass
+    assert len(polls) == 1
 
 
 def test_development_logs_keep_requests_and_errors_without_poll_noise(

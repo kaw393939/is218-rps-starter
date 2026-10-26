@@ -12,9 +12,9 @@ Start with **your GitHub copy → SSH clone → local AI project**. The steps be
 
 **First, get the repo into your AI project.** Use your existing class SSH setup in macOS Terminal or Ubuntu/WSL on Windows. The agent will help check Python and prepare the app after you open the folder.
 
-Sign in to GitHub. On [the starter](https://github.com/kaw393939/is218-rps-starter), choose **Use this template → Create a new repository**. Use your account, name it `my-rps`, choose **Public**, leave **Include all branches** off, and leave the optional Copilot prompt blank. Already made your copy? Open it and skip creating another.
+Sign in to GitHub. On [the starter](https://github.com/kaw393939/is218-rps-starter), choose **Use this template → Create a new repository**. Use your account, name it `my-rps`, choose **Public**, leave **Include all branches** off, and leave the optional Copilot prompt blank. Wait until your new repository shows its README/files before cloning. Already made your copy? Open it and skip creating another.
 
-In your projects folder, replace `YOUR-USERNAME` below. If you chose another repository name, replace `my-rps` too. **Run one command at a time; stop if one fails.** `pwd` must end in your repository's folder name, and both lines from `git remote -v` must identify **your copy** using `git@github.com:`.
+Open your class terminal in your existing projects folder. If your clone is already there, `cd` into it instead of cloning again. Replace `YOUR-USERNAME` below. If you chose another repository name, replace `my-rps` too. **Run one command at a time; stop if one fails.** `pwd` must end in your repository's folder name, and both lines from `git remote -v` must identify **your copy** using `git@github.com:`.
 
 ```sh
 git clone git@github.com:YOUR-USERNAME/my-rps.git
@@ -29,7 +29,7 @@ Ask:
 
 > Read README.md, AGENTS.md, and SPEC.md. Guide me through this lab one small step at a time. Explain briefly, then give me one action or question and wait for my reply. Ask me to predict and explain as we go; help if I'm unsure. Start by confirming this folder and helping me run the unfinished game. Do not implement the rules, commit, or push yet.
 
-**Connection checkpoint:** the agent names your cloned folder and explains the task from its files. It should not need you to upload or paste them. [Using another coding agent?](https://kaw393939.github.io/218_spec/setup.html#another-coding-agent)
+**Connection checkpoint:** the agent reports the full clone path and your SSH remote, then explains the task from its files. It should not need you to upload or paste them. [Using another coding agent?](https://kaw393939.github.io/218_spec/setup.html#another-coding-agent)
 
 Let it verify **Python 3.12.x**, prepare `.venv`, install the pinned requirements and Chromium, and run `.venv/bin/python check.py`. Ask it to explain errors and the smallest fix; [Python help](https://kaw393939.github.io/218_spec/setup.html#python-version) covers the class setup. Expect **PASS** at each check and **STARTER BASELINE ONLY**: the missing game rules are not verified yet.
 
@@ -39,17 +39,17 @@ When ready, use your original **class terminal**, still in the clone, to start t
 .venv/bin/python run.py
 ```
 
-Open the printed address, usually **http://127.0.0.1:5050**. Click a move: expect both choices and **“Starter: game rules not built yet.”** A missing winner is the task, not a failed setup. Leave this terminal running the game. You will open the AI project's separate terminal for checks and Git in Step 2.
+Open the printed address, usually **http://127.0.0.1:5050**. If port 5050 is busy, leave other programs running and use `PORT=5051 .venv/bin/python run.py`, then open its printed address instead. Click a move: expect both choices and **“Starter: game rules not built yet.”** A missing winner is the task, not a failed setup. Leave this terminal running the game. You will open the AI project's separate terminal for checks and Git in Step 2.
 
 This is the recommended **local development mode**. Once you **save** a Python, HTML template, CSS, or JavaScript change, the open browser automatically returns to the starting page with that change. Python saves restart the server; the browser waits for it to return. If a Python error stops the server, fix the error shown in the terminal and run the same start command again. The displayed round clears instead of resubmitting your last move. Saved files remain on disk; there is no saved game history. Stop the server with **Ctrl+C** in this terminal.
 
-For an optional stable demonstration, stop the server and use `.venv/bin/python run.py --plain`. This disables both automatic server restarts and browser refresh; restart it and open the printed address again after editing. Both modes need the Python 3.12 `.venv` and requirements prepared above, bind only to your computer, and leave the interactive debugger off. Checks start their own reload-free server, so keep using `.venv/bin/python check.py` in the other terminal. GitHub Pages hosts the exercise instructions; the Python game runs locally at the printed address.
+Optional manual preview: stop the server, run `.venv/bin/python run.py --plain`, and open the printed address again. Reuse your `PORT=5051` prefix if needed. This mode does not restart or refresh automatically: after Python or template edits, restart it and reopen its address; after CSS/JavaScript edits, refresh manually. Checks use their own servers, so run `.venv/bin/python check.py` in the other terminal. GitHub Pages hosts the instructions; your Python game runs locally.
 
 **Checkpoint:** your agent is connected to the clone, the starter checks pass, and you can see the game's unfinished notice. Stuck? [Setup help](https://kaw393939.github.io/218_spec/setup.html).
 
 Tell the agent what you see. It will ask what the passing starter checks verified; talk that through before planning the missing rules.
 
-**Returning later?** In your class terminal, `cd` to this existing clone and run `.venv/bin/python run.py` again. If you used another port, reuse that command and address. Reopen the same project/chat in ChatGPT desktop and continue at your last checkpoint; do not clone or install again. If the game is already running, leave that server running.
+**Returning later?** Check your game terminal first. If the server is still running, use its printed address. Otherwise `cd` to this existing clone and run `.venv/bin/python run.py`, reusing your `PORT` prefix if you chose another port. Reopen the same project/chat and continue at your last checkpoint; do not clone or install again.
 
 ## 2. Decide with your coding agent
 
