@@ -128,7 +128,7 @@ git commit -m "RPS-001: play a round"
 git push -u origin rps-001
 ```
 
-In **your GitHub repository → Pull requests → New pull request**, use base `main` and compare `rps-001`. Describe the result and actual checks; add **`Closes #N`** with your issue number. In **Files changed**, verify the added tests use real rules rather than just the supplied stubs. Wait for **Python checks** to pass, then merge when it matches the spec.
+In **your GitHub repository → Pull requests → New pull request**, use base `main` and compare `rps-001`. Describe the result and actual checks; add **`Closes #N`** with your issue number. In **Files changed**, verify the added tests use real rules rather than just the supplied stubs. Have the agent add the actual PR and CI run links to `SPEC.md` and push that record update. Wait for **Python checks** on the latest commit to pass, then merge when it matches the spec.
 
 **Done:** the game works locally, the PR is merged, its issue is closed, and the spec links to code and actual checks. Return to the **class terminal running the game** and stop it with Ctrl+C. No website deployment or extra reflection document is required.
 

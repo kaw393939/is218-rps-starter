@@ -1,4 +1,4 @@
-"""Saved-file browser refresh in a disposable copy of the unfinished starter."""
+"""Saved-file browser refresh before and after students implement the rules."""
 
 from pathlib import Path
 from queue import Empty, Queue
@@ -106,7 +106,10 @@ def test_saved_python_template_css_and_js_refresh_browser(page: Page, launch_gam
     expect(page.get_by_role("button", name="Rock", exact=True)).to_contain_text(
         "PYTHON SAVE ARRIVED", timeout=15000
     )
-    expect(page.get_by_role("status")).to_contain_text("game rules not built yet")
+    # Refresh returns to a new round, with or without completed game rules.
+    expect(page.get_by_role("heading", name="Saved template arrived")).to_be_visible()
+    expect(page.get_by_label("This round’s choices")).to_have_count(0)
+    expect(page.locator("[data-outcome]")).to_have_count(0)
 
 
 @pytest.mark.parametrize("launch_game", [["--plain"]], indirect=True)
