@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 
 from app import app
-from dev import enable_browser_refresh
+from dev import DevelopmentRequestHandler, enable_browser_refresh
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
@@ -23,5 +23,6 @@ if __name__ == "__main__":
         debug=False,
         use_debugger=False,
         use_reloader=not options.plain,
+        request_handler=DevelopmentRequestHandler if not options.plain else None,
         extra_files=sorted(str(path) for path in Path(__file__).parent.glob("*.py")),
     )

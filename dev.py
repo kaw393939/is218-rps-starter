@@ -5,6 +5,16 @@ from pathlib import Path
 from uuid import uuid4
 
 from flask import Flask
+from werkzeug.serving import WSGIRequestHandler
+
+
+class DevelopmentRequestHandler(WSGIRequestHandler):
+    """Keep successful refresh polls from drowning out useful terminal output."""
+
+    def log_request(self, code="-", size="-"):
+        if code == 200 and getattr(self, "path", None) == "/__dev__/revision":
+            return
+        super().log_request(code, size)
 
 
 def enable_browser_refresh(app: Flask) -> None:

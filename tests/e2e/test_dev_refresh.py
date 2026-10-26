@@ -50,7 +50,7 @@ def fixture_launch_game(tmp_path, request):
                 address = re.search(r"Running on (http://127\.0\.0\.1:\d+)", line)
                 if address:
                     break
-            yield tmp_path, address.group(1)
+            yield tmp_path, address.group(1), output
         finally:
             process.terminate()
             try:
@@ -62,7 +62,7 @@ def fixture_launch_game(tmp_path, request):
 
 def test_saved_python_template_css_and_js_refresh_browser(page: Page, launch_game):
     """Each save updates a real open page, with no manual refresh/navigation."""
-    project, address = launch_game
+    project, address, _ = launch_game
     page.goto(address)
     page.get_by_role("button", name="Rock", exact=True).click()
     expect(page.get_by_label("This round’s choices")).to_be_visible()
@@ -112,9 +112,35 @@ def test_saved_python_template_css_and_js_refresh_browser(page: Page, launch_gam
 @pytest.mark.parametrize("launch_game", [["--plain"]], indirect=True)
 def test_plain_mode_omits_browser_refresh(page: Page, launch_game):
     """The optional demo mode has no polling script or development endpoint."""
-    _, address = launch_game
+    _, address, _ = launch_game
     page.goto(address)
     expect(page.locator('script[src*="dev-refresh"]')).to_have_count(0)
     assert page.request.get(address + "/__dev__/revision").status == 404
     page.get_by_role("button", name="Paper", exact=True).click()
     expect(page.get_by_label("This round’s choices")).to_be_visible()
+
+
+def test_development_logs_keep_requests_and_errors_without_poll_noise(
+    page: Page, launch_game
+):
+    """Actual launcher output hides only successful revision-poll access lines."""
+    _, address, output = launch_game
+    page.goto(address)
+    assert page.request.get(address + "/__dev__/revision").status == 200
+    assert page.request.post(address + "/__dev__/revision").status == 405
+    assert page.request.post(address, form={"move": "lizard"}).status == 400
+    assert page.request.get(address + "/log-check-missing").status == 404
+    logs = []
+    while True:
+        try:
+            line = re.sub(r"\x1b\[[0-9;]*m", "", output.get(timeout=15))
+        except Empty:
+            pytest.fail("Expected terminal request line was missing:\n" + "".join(logs))
+        logs.append(line)
+        if 'GET /log-check-missing HTTP/1.1" 404' in line:
+            break
+    actual = "".join(logs)
+    assert 'GET /__dev__/revision HTTP/1.1" 200' not in actual
+    assert 'POST /__dev__/revision HTTP/1.1" 405' in actual
+    assert 'GET / HTTP/1.1" 200' in actual
+    assert 'POST / HTTP/1.1" 400' in actual
